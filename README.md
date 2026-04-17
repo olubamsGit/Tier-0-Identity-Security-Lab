@@ -201,6 +201,21 @@ Instead of focusing on theory, this lab simulates real-world identity attack sce
 * High-privilege identities can access broad directory data
 * Machine identities are often under-monitored
 
+### Workload Identity Authentication and Activity
+
+![Service Principal Sign-In](screenshots/sp-logs.png)
+
+*Service principal authentication activity captured in Sentinel after requesting a Microsoft Graph token.*
+
+---
+
+![Graph API Call](screenshots/sp-graph-call.png)
+
+*Successful app-only Graph API request demonstrating directory access without user interaction.*
+
+---
+
+This demonstrates how workload identities authenticate independently of users and can interact with core identity services. These identities require the same level of monitoring and governance as privileged user accounts.
 ---
 
 ## 📊 Key Takeaways
