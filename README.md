@@ -189,31 +189,60 @@ Instead of focusing on theory, this lab simulates real-world identity attack sce
 
 ---
 
-### 🔹 Scenario 4: Workload Identity Risk
+### 🔹 Scenario 4: Workload Identity Activity (Service Principals)
 
-![Service Principal Permissions](screenshots/sp-permissions.png)
+![Service Principal Audit Activity](screenshots/sp-audit-activity.png)
 
-*Over-permissioned service principals demonstrate hidden attack surface risk.*
-
-**Findings:**
-
-* Low-privilege identities have minimal impact
-* High-privilege identities can access broad directory data
-* Machine identities are often under-monitored
-
-### Workload Identity Authentication and Activity
-
-![Service Principal Sign-In](screenshots/sp-logs.png)
-
-*Service principal authentication activity captured in Sentinel after requesting a Microsoft Graph token.*
+*Audit activity in Microsoft Sentinel associated with workload identity operations, showing that service-principal-driven actions were captured in the logging pipeline.*
 
 ---
 
 ![Graph API Call](screenshots/sp-graph-call.png)
 
-*Successful app-only Graph API request demonstrating directory access without user interaction.*
+*Successful app-only Microsoft Graph request demonstrating directory access without user interaction.*
 
 ---
+
+### Actions Performed
+
+* Authenticated using a service principal (`sp-lowpriv-lab`) via client credentials
+* Requested an access token from Microsoft Entra ID
+* Executed a read-only Microsoft Graph query
+* Observed resulting activity in Sentinel audit logs
+
+---
+
+### Findings
+
+* Workload identities authenticate without user interaction
+* App-only access enables interaction with core identity services
+* Activity is logged, but often less visible than user-based sign-ins
+* Machine identities can operate with low friction once configured
+
+---
+
+### Key Insight
+
+Workload identities represent a growing attack surface.
+If over-permissioned or insufficiently monitored, they can introduce risk comparable to privileged user accounts.
+
+---
+
+### Detection Approach
+
+Service principal activity was identified using audit log queries in Microsoft Sentinel:
+
+```kusto
+AuditLogs
+| where TimeGenerated > ago(24h)
+| where tostring(InitiatedBy) has "sp-lowpriv-lab"
+   or tostring(TargetResources) has "sp-lowpriv-lab"
+| project TimeGenerated, OperationName, Result, InitiatedBy, TargetResources
+| sort by TimeGenerated desc
+```
+
+---
+
 
 This demonstrates how workload identities authenticate independently of users and can interact with core identity services. These identities require the same level of monitoring and governance as privileged user accounts.
 ---
