@@ -10,7 +10,7 @@ This project demonstrates how identity compromise impacts a modern hybrid enviro
 
 Instead of focusing on theory, this lab simulates real-world identity attack scenarios and analyzes how different identity types affect control, access, and detection.
 
-> Identity is not just part of the security stack — it is the control plane.
+> Identity is not just part of the security stack, it is the control plane.
 
 ---
 
